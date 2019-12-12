@@ -52,13 +52,8 @@ export default class DashboardScreen extends Component {
     this.setState({
       spinner: !this.state.spinner
     });
-    var token = this.props.navigation.getParam("token");
-    var userID = this.props.navigation.getParam("id")
-    var result = await searchMember(
-      token,
-      userID,
-      id
-    );
+
+    var result = await searchMember(global.token, global.id, id, global.server);
     this.setState({
       spinner: !this.state.spinner
     });
@@ -66,19 +61,20 @@ export default class DashboardScreen extends Component {
       alert("No User Found");
     } else {
       this.props.navigation.navigate("AccountInformation", {
-        data: result[0]
+        data: result[0],
       });
     }
   };
 
   async componentDidMount() {
-    var server = await getServer();
+    console.log(global.server)
+    console.log(global.id)
+    console.log(global.token)
     this.setState({
-      imageServer: server + "/images/"
+      imageServer: global.server + "images/",
+      server: global.server
     });
-    var token = await this.props.navigation.getParam("token");
-    var raw = await getMemberList(token, " ");
-    console.log("XXXXXXXXXXx")
+    var raw = await getMemberList(global.token, " ", global.server);
     if (raw != undefined) {
       this.setState({
         pageInfo: raw[raw.length - 1]
@@ -91,8 +87,7 @@ export default class DashboardScreen extends Component {
   }
 
   prev = async () => {
-    var token = this.props.navigation.getParam("token");
-    var raw = await getMemberList(token, " ");
+    var raw = await getMemberList(global.token, " ", global.server);
 
     if (raw != undefined) {
       this.setState({
@@ -106,8 +101,7 @@ export default class DashboardScreen extends Component {
   };
 
   next = async () => {
-    var token = this.props.navigation.getParam("token");
-    var raw = await getMemberList(token, " ");
+    var raw = await getMemberList(global.token, " ", global.server);
     if (raw != undefined) {
       this.setState({
         pageInfo: raw[raw.length - 1]
@@ -120,6 +114,8 @@ export default class DashboardScreen extends Component {
   };
 
   logout = async () => {
+    global.id = ""
+    global.token = ""
     this.props.navigation.navigate("SignIn");
   };
 
@@ -149,10 +145,10 @@ export default class DashboardScreen extends Component {
           </View>
           <TouchableOpacity
             onPress={() =>
-              // this.props.navigation.navigate("Scanner", {
-              //   scannedID: this.scannedID.bind(this)
-              // })
-              this.search('QRKP-YFAFLZD2-2019')
+              this.props.navigation.navigate("Scanner", {
+                scannedID: this.scannedID.bind(this)
+              })
+              // this.search("QRKP-YFAFLZD2-2019")
             }
           >
             <SvgXml
@@ -170,7 +166,11 @@ export default class DashboardScreen extends Component {
               <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.navigate("AccountInformation", {
-                    data: item
+                    data: item,
+                    server: this.state.server,
+                    token: this.props.navigation.getParam("token"),
+                    id: this.props.navigation.getParam("id"),
+                    server: this.props.navigation.getParam("server")
                   })
                 }
               >
@@ -185,6 +185,9 @@ export default class DashboardScreen extends Component {
                         ".png"
                     }}
                   />
+                  {console.log(
+                    this.state.imageServer + "pics/" + item.username + ".png"
+                  )}
                   <View>
                     <Text style={styles.textName}>
                       {item.firstname + " " + item.lastname}

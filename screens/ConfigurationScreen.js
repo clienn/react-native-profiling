@@ -39,17 +39,17 @@ export default class Configuration extends React.Component {
   };
 
   componentDidMount() {
-    db.transaction(tx => {
+    // db.transaction(tx => {
 
 
-      tx.executeSql("select * from table_server", [], (_, { rows }) => {
-        if (rows.length > 0) {
+      // tx.executeSql("select * from table_server", [], (_, { rows }) => {
+      //   if (rows.length > 0) {
           this.setState({
-            server: rows["_array"][0].value
+            server: global.server
           });
-        }
-      });
-    });
+    //     }
+    //   });
+    // });
   }
 
 
@@ -62,7 +62,7 @@ export default class Configuration extends React.Component {
         (tx, results) => {
           console.log("Results", results.rowsAffected);
           if (results.rowsAffected > 0) {
-            console.log(results);
+            global.server = text
             Alert.alert(
               "Success",
               "User updated successfully",

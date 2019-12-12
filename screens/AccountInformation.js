@@ -19,7 +19,8 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { SvgXml } from "react-native-svg";
-import { scan } from "../api/api";
+import {  searchMember } from "../api/apiTest";
+
 import Spinner from "react-native-loading-spinner-overlay";
 
 export default class AccountInformation extends Component {
@@ -30,21 +31,19 @@ export default class AccountInformation extends Component {
     data: {},
     raw: {},
     id: '',
-    network:'',
+    imageServer:'sad',
     spinner: false,
 
   };
 
   async componentWillMount() {
-    this.setState({
-      spinner: !this.state.spinner
-    });
-    console.log("here");
-    console.log(this.state.network)
-    console.log("here")
+    // this.setState({
+    //   spinner: !this.state.spinner
+    // });
     var info = this.props.navigation.getParam("data");
     this.setState({
-      raw: info
+      raw: info,
+      imageServer: global.server + "images/"
     });
     console.log(info)
     this.setState({
@@ -67,29 +66,22 @@ export default class AccountInformation extends Component {
         }
       ]
     });
-    this.setState({
-      network:  await AsyncStorage.getItem("ip") + '/images',
-
-    })
-    this.setState({
-      spinner: !this.state.spinner
-    });
   }
 
   scannedID(id) {
     this.setState({ id: id });
-    this.manualSearch(id);
+    this.search(id);
   }
 
-  manualSearch = async id => {
+  search = async id => {
     this.setState({
       spinner: !this.state.spinner
     });
-    var result = await scan(
-      await AsyncStorage.getItem("token"),
-      await AsyncStorage.getItem("id"),
-      id
-    );
+    var token = this.props.navigation.getParam("token");
+    var userID = this.props.navigation.getParam("id");
+    var server = this.props.navigation.getParam("server");
+
+    var result = await searchMember(global.token, global.id, id, global.server);
     this.setState({
       spinner: !this.state.spinner
     });
@@ -153,6 +145,7 @@ export default class AccountInformation extends Component {
                   this.props.navigation.navigate("Scanner", {
                     scannedID: this.scannedID.bind(this)
                   })
+                  // this.search("QRKP-YFAFLZD2-2019")
                 }
                 width={hp("6%").toString()}
                 height={hp("6%").toString()}
@@ -170,16 +163,12 @@ export default class AccountInformation extends Component {
             style={styles.imageSign}
             source={{
               uri:
-                this.state.network + "/signatures/" +
+                this.state.imageServer + "signatures/" +
                 this.state.raw.username +
                 ".png"
             }}
           />
-          {console.log(
-            "http://192.168.37.1:8001/images/signatures/" +
-              this.state.raw.username +
-              ".png"
-          )}
+         
           <View style={styles.containerList}>
             <FlatList
               data={this.state.data}
@@ -219,11 +208,14 @@ export default class AccountInformation extends Component {
             style={styles.imageProfile}
             source={{
               uri:
-              this.state.network + "/pics/" +
+              this.state.imageServer + "pics/" +
               this.state.raw.username +
               ".png"
             }}
           />
+          {console.log(this.state.imageServer + "pics/" +
+              this.state.raw.username +
+              ".png")}
         </View>
       </ScrollView>
     );

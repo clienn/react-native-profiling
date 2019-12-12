@@ -24,16 +24,24 @@ export default class SignInScreen extends React.Component {
     header: null
   };
 
+  constructor() {
+    super();
+    //Setting up global variable
+    global.server = '';
+    global.token ='';
+  }
+
   state = {
-    id: "QRKP-FDGNXTK1-2019",
-    password: "qqww1122",
+    id: "",
+    password: "",
     token: "",
-    spinner: false
+    spinner: false,
   };
 
-  async componentWillMount() {
-    initDatabase();
+  
 
+  async componentWillMount() {
+    global.server = await initDatabase();
   }
   scannedID(id) {
     this.setState({ id: id });
@@ -44,15 +52,16 @@ export default class SignInScreen extends React.Component {
     this.setState({
       spinner: !this.state.spinner
     });
-    var token = await signIn(this.state.id, this.state.password);
+    global.token = await signIn(this.state.id, this.state.password, global.server);
     this.setState({
       spinner: !this.state.spinner,
-      token: token
     });
     if (token == 'error') {
       alert("Invalid Credentials/Server Address");
     } else {
-      this.props.navigation.navigate("DashBoard", this.state);
+      global.id = this.state.id;
+
+      this.props.navigation.navigate("DashBoard");
     }
   };
 
