@@ -22,7 +22,7 @@ export const initDatabase = async (username, password) => {
               defaultServer
             ]);
           }, null);
-          resolve(def);
+          resolve(defaultServer);
         }
       });
     });
@@ -118,7 +118,8 @@ export const searchMember = async (token, userID, searchID, server) => {
     .then(response => response.json())
     .then(res => {
       if (typeof res.message != "undefined") {
-        // console.log("Error: " + res.message);
+        console.log("Error: " + res.message);
+        return "error"
       } else {
         return(res);
       }

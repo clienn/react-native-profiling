@@ -33,6 +33,7 @@ export default class AccountInformation extends Component {
     id: '',
     imageServer:'sad',
     spinner: false,
+    classification: ['Leader', 'Staff', 'Member']
 
   };
 
@@ -50,7 +51,7 @@ export default class AccountInformation extends Component {
       accountNumber: info.username,
 
       data: [
-        { left: "Classification", right: info.classification_id },
+        { left: "Classification", right: this.state.classification[parseInt(info.classification_id)-1] },
         { left: "Branch ID", right: info.branch_id },
         { left: "Branch Name", right: info.name },
         { left: "First Name:", right: info.firstname },
@@ -96,7 +97,7 @@ export default class AccountInformation extends Component {
       accountNumber: info.username,
 
       data: [
-        { left: "Classification", right: info.classification_id },
+        { left: "Classification", right: this.state.classification[parseInt(info.classification_id)-1] },
         { left: "Branch ID:", right: info.branch_id },
         { left: "Branch Name:", right: info.name },
 

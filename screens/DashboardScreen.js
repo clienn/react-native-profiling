@@ -40,7 +40,9 @@ export default class DashboardScreen extends Component {
     myId: "",
     pageInfo: {},
     spinner: false,
-    imageServer: ""
+    imageServer: "",
+    next: false,
+    prev: false
   };
 
   scannedID(id) {
@@ -56,8 +58,8 @@ export default class DashboardScreen extends Component {
     var result = await searchMember(global.token, global.id, id, global.server);
     this.setState({
       spinner: !this.state.spinner
-    });
-    if (result.length == 0) {
+    })
+    if (result == 'error') {
       alert("No User Found");
     } else {
       this.props.navigation.navigate("AccountInformation", {
@@ -84,10 +86,11 @@ export default class DashboardScreen extends Component {
         data: raw
       });
     }
+ 
   }
 
   prev = async () => {
-    var raw = await getMemberList(global.token, " ", global.server);
+    var raw = await getMemberList(global.token, this.state.pageInfo.prev, global.server);
 
     if (raw != undefined) {
       this.setState({
@@ -101,7 +104,7 @@ export default class DashboardScreen extends Component {
   };
 
   next = async () => {
-    var raw = await getMemberList(global.token, " ", global.server);
+    var raw = await getMemberList(global.token, this.state.pageInfo.next, global.server);
     if (raw != undefined) {
       this.setState({
         pageInfo: raw[raw.length - 1]
@@ -210,6 +213,7 @@ export default class DashboardScreen extends Component {
         <View style={styles.containerPagination}>
           <View>
             <TouchableOpacity
+              disabled={this.state.pageInfo.prev == "" ? true : false}
               style={styles.containerPageNav}
               onPress={() => this.prev()}
             >
@@ -225,6 +229,7 @@ export default class DashboardScreen extends Component {
 
           <View>
             <TouchableOpacity
+              disabled={this.state.pageInfo.next == "" ? true : false}
               style={styles.containerPageNav}
               onPress={() => this.next()}
             >
