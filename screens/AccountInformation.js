@@ -78,15 +78,13 @@ export default class AccountInformation extends Component {
     this.setState({
       spinner: !this.state.spinner
     });
-    var token = this.props.navigation.getParam("token");
-    var userID = this.props.navigation.getParam("id");
-    var server = this.props.navigation.getParam("server");
+  
 
     var result = await searchMember(global.token, global.id, id, global.server);
     this.setState({
       spinner: !this.state.spinner
     });
-    if (result.length == 0) {
+    if (result == "error") {
       alert("No User Found");
     } else {
       var info = result[0];
