@@ -13,7 +13,7 @@ export const initDatabase = async (username, password) => {
       );
       tx.executeSql("select * from table_server", [], (_, { rows }) => {
         if (rows.length > 0) {
-          // console.log("server: ", rows["_array"][0].value);
+          console.log("server: ", rows["_array"][0].value);
           resolve(rows["_array"][0].value);
         } else {
           // console.log("empty");
@@ -23,18 +23,6 @@ export const initDatabase = async (username, password) => {
             ]);
           }, null);
           resolve(defaultServer);
-        }
-      });
-    });
-  });
-};
-
-export const getServer = async () => {
-  return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      tx.executeSql("select * from table_server", [], (_, { rows }) => {
-        if (rows.length > 0) {
-          resolve(rows["_array"][0].value);
         }
       });
     });
@@ -59,7 +47,7 @@ export const signIn = async (username, password, server) => {
     .then(res => {
       if (typeof res.message != "undefined") {
         // console.log("Error: " + res.message);
-        resolve("error");
+        return("error 1");
       } else {
         // console.log("Success fetching token");
         // console.log("Token: ", res.access_token);
@@ -68,7 +56,7 @@ export const signIn = async (username, password, server) => {
     })
     .catch(error => {
       // console.log(error);
-      return "error";
+      return "error 2";
     });
 };
 

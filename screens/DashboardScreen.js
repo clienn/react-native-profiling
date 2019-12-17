@@ -24,7 +24,7 @@ import {
 } from "react-native-responsive-screen";
 import Spinner from "react-native-loading-spinner-overlay";
 import { memberList, scan } from "../api/api";
-import { getServer, getMemberList, searchMember } from "../api/apiTest";
+import {  getMemberList, searchMember } from "../api/apiTest";
 
 import { SvgXml } from "react-native-svg";
 console.ignoredYellowBox = ["Remote debugger"];

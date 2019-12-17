@@ -52,12 +52,10 @@ export default class AccountInformation extends Component {
 
       data: [
         { left: "Classification", right: this.state.classification[parseInt(info.classification_id)-1] },
-        { left: "Branch ID", right: info.branch_id },
         { left: "Branch Name", right: info.name },
         { left: "First Name:", right: info.firstname },
         { left: "Last Name:", right: info.lastname },
         { left: "Middle Name:", right: info.middlename },
-        { left: "Age:", right: info.age },
         { left: "Status", right: info.status },
         { left: "Birthdate:", right: info.birthdate },
         { left: "Contact No.", right: info.contact },
@@ -96,13 +94,10 @@ export default class AccountInformation extends Component {
 
       data: [
         { left: "Classification", right: this.state.classification[parseInt(info.classification_id)-1] },
-        { left: "Branch ID:", right: info.branch_id },
         { left: "Branch Name:", right: info.name },
-
         { left: "First Name:", right: info.firstname },
         { left: "Last Name:", right: info.lastname },
         { left: "Middle Name:", right: info.middlename },
-        { left: "Age:", right: info.age },
         { left: "Status", right: info.status },
         { left: "Birthdate:", right: info.birthdate },
         { left: "Contact No.", right: info.contact },
